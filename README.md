@@ -1,3 +1,14 @@
+### 檔案下載
+```
+https://drive.google.com/drive/folders/1y0rtlpU3L6H_Fa_VUJL1nuvHR1QRlZ_W?usp=sharing
+```
+
+### 執行minikube
+```
+minikube.exe start --driver=docker --memory 4096
+```
+
+### 測試minikube
 ```
 C:\> kubectl run nginx --image=nginx
 pod/nginx created
