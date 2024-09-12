@@ -39,8 +39,6 @@ spec:
       labels:
         app: nginx
     spec:
-      volumes:
-      - name: andyvol
       containers:
       - name: nginx
         image: nginx
