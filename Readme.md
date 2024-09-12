@@ -23,12 +23,59 @@ Forwarding from [::1]:8080 -> 80
 
 C:\> kubectl delete pod nginx
 pod "nginx" deleted
+```
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      volumes:
+      - name: andyvol
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
 
-C:\> minikube stop
-* Stopping node "minikube"  ...
-* Powering off "minikube" via SSH ...
-* 1 node stopped.
+C:\Users\admin\Downloads>kubectl create -f dep.yaml
+deployment.apps/nginx-deployment created
 
+C:\Users\admin\Downloads>kubectl get pod
+NAME                                READY   STATUS    RESTARTS   AGE
+nginx-deployment-68f78587df-5nssg   1/1     Running   0          21s
+nginx-deployment-68f78587df-9dh89   1/1     Running   0          21s
+nginx-deployment-68f78587df-l4xqt   1/1     Running   0          21s
+nginx-deployment-68f78587df-nj494   1/1     Running   0          21s
+nginx-deployment-68f78587df-p5dld   1/1     Running   0          22s
+
+C:\Users\admin\Downloads>kubectl delete -f  dep.yaml
+deployment.apps "nginx-deployment" deleted
+```
+```
+c:\> kubectl run ubuntu --rm -it --image ubuntu:22.04 -- /bin/bash
+If you don't see a command prompt, try pressing enter.
+
+root@ubuntu:/# ls
+bin  boot  dev  etc  home  lib  lib32  lib64  libx32  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+
+root@ubuntu:/# exit
+exit
+Session ended, resume using 'kubectl attach ubuntu -c ubuntu -i -t' command when the pod is running
+pod "ubuntu" deleted
+```
+
+### 開啟關閉minikube
+```
 C:\> minikube start
 * minikube v1.33.1 on Microsoft Windows 10 Pro 10.0.19045.2965 Build 19045.2965
 * Using the docker driver based on existing profile
@@ -42,14 +89,8 @@ C:\> minikube start
 * kubectl not found. If you need it, try: 'minikube kubectl -- get pods -A'
 * Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
 
-c:\> kubectl run ubuntu --rm -it --image ubuntu:22.04 -- /bin/bash
-If you don't see a command prompt, try pressing enter.
-
-root@ubuntu:/# ls
-bin  boot  dev  etc  home  lib  lib32  lib64  libx32  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
-
-root@ubuntu:/# exit
-exit
-Session ended, resume using 'kubectl attach ubuntu -c ubuntu -i -t' command when the pod is running
-pod "ubuntu" deleted
+C:\> minikube stop
+* Stopping node "minikube"  ...
+* Powering off "minikube" via SSH ...
+* 1 node stopped.
 ```
