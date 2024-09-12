@@ -42,8 +42,6 @@ spec:
       containers:
       - name: nginx
         image: nginx
-        ports:
-        - containerPort: 80
 
 C:\Users\admin\Downloads>kubectl create -f dep.yaml
 deployment.apps/nginx-deployment created
