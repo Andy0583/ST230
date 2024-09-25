@@ -1,30 +1,64 @@
-### 檔案下載
 ```
 https://drive.google.com/drive/folders/1y0rtlpU3L6H_Fa_VUJL1nuvHR1QRlZ_W?usp=sharing
 ```
 
-### 執行minikube
 ```
-minikube.exe start --driver=docker --memory 4096
+C:\Users\andyhsu>minikube start --driver=docker --memory 4096
+
+* minikube v1.33.1 on Microsoft Windows 11 Pro 10.0.22621.2428 Build 22621.2428
+* Kubernetes 1.30.0 is now available. If you would like to upgrade, specify: --kubernetes-version=v1.30.0
+* Using the docker driver based on existing profile
+! You cannot change the memory size for an existing minikube cluster. Please first delete the cluster.
+* Starting "minikube" primary control-plane node in "minikube" cluster
+* Pulling base image v0.0.44 ...
+* minikube 1.34.0 is available! Download it: https://github.com/kubernetes/minikube/releases/tag/v1.34.0
+* To disable this notice, run: 'minikube config set WantUpdateNotification false'
+
+* docker "minikube" container is missing, will recreate.
+* Creating docker container (CPUs=2, Memory=4000MB) ...
+! Image was not built for the current minikube version. To resolve this you can delete and recreate your minikube cluster using the latest images. Expected minikube version: v1.32.0 -> Actual minikube version: v1.33.1
+* Preparing Kubernetes v1.28.3 on Docker 24.0.7 ...
+  - Generating certificates and keys ...
+  - Booting up control plane ...
+  - Configuring RBAC rules ...
+* Configuring bridge CNI (Container Networking Interface) ...
+Bad local forwarding specification '0:localhost:8443'
+* Verifying Kubernetes components...
+  - Using image docker.io/kubernetesui/dashboard:v2.7.0
+  - Using image gcr.io/k8s-minikube/storage-provisioner:v5
+  - Using image docker.io/kubernetesui/metrics-scraper:v1.0.8
+* Some dashboard features require the metrics-server addon. To enable all features please run:
+        minikube addons enable metrics-server
+* Enabled addons: storage-provisioner, default-storageclass, dashboard
+* kubectl not found. If you need it, try: 'minikube kubectl -- get pods -A'
+* Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+```
+
+```
+C:\Users\andyhsu>kubectl get node
+NAME       STATUS   ROLES           AGE   VERSION
+minikube   Ready    control-plane   87s   v1.28.3
 ```
 
 ### 測試minikube
 ```
-C:\> kubectl run nginx --image=nginx
+C:\Users\andyhsu>kubectl run nginx --image=nginx
 pod/nginx created
 
-C:\> kubectl get pods
+C:\Users\andyhsu>kubectl get pods
 NAME    READY   STATUS    RESTARTS   AGE
-nginx   1/1     Running   0          2m4s
+nginx   1/1     Running   0          39s
 
-C:\> kubectl port-forward nginx 8080:80
+C:\Users\andyhsu>kubectl port-forward nginx 8080:80
 Forwarding from 127.0.0.1:8080 -> 80
 Forwarding from [::1]:8080 -> 80
 
-C:\> kubectl delete pod nginx
+C:\Users\andyhsu>kubectl delete pod nginx
 pod "nginx" deleted
 ```
 ```
+vi test.yaml
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -43,10 +77,10 @@ spec:
       - name: nginx
         image: nginx
 
-C:\Users\admin\Downloads>kubectl create -f dep.yaml
+C:\Users\andyhsu>kubectl create -f dep.yaml
 deployment.apps/nginx-deployment created
 
-C:\Users\admin\Downloads>kubectl get pod
+C:\Users\andyhsu>kubectl get pod
 NAME                                READY   STATUS    RESTARTS   AGE
 nginx-deployment-68f78587df-5nssg   1/1     Running   0          21s
 nginx-deployment-68f78587df-9dh89   1/1     Running   0          21s
@@ -54,7 +88,7 @@ nginx-deployment-68f78587df-l4xqt   1/1     Running   0          21s
 nginx-deployment-68f78587df-nj494   1/1     Running   0          21s
 nginx-deployment-68f78587df-p5dld   1/1     Running   0          22s
 
-C:\Users\admin\Downloads>kubectl delete -f  dep.yaml
+C:\Users\andyhsu>kubectl delete -f  dep.yaml
 deployment.apps "nginx-deployment" deleted
 ```
 ```
