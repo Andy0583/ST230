@@ -1,3 +1,4 @@
+### 安裝minikube
 ```
 https://drive.google.com/drive/folders/1y0rtlpU3L6H_Fa_VUJL1nuvHR1QRlZ_W?usp=sharing
 ```
@@ -55,6 +56,21 @@ Forwarding from [::1]:8080 -> 80
 
 C:\Users\andyhsu>kubectl delete pod nginx
 pod "nginx" deleted
+```
+```
+C:\Users\andyhsu>kubectl run windows --image=dockurr/windows
+pod/windows created
+
+C:\Users\andyhsu>kubectl get pods
+NAME    READY   STATUS    RESTARTS   AGE
+windows   1/1     Running   0          39s
+
+C:\Users\andyhsu>kubectl port-forward nginx 8080:8006
+Forwarding from 127.0.0.1:8080 -> 8006
+Forwarding from [::1]:8080 -> 8006
+
+C:\Users\andyhsu>kubectl delete pod windows
+pod "windows" deleted
 ```
 ```
 vi test.yaml
