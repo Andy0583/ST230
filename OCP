@@ -1,7 +1,0 @@
-### 將RHEL ISO上傳至bastion中
-```
-[root@bastion ~]# mkdir /var/repo
-
-[root@bastion ~]# mount -o loop rhel-baseos-9.1-x86_64-dvd.iso /var/repo/
-mount: /var/repo: WARNING: source write-protected, mounted read-only.
-```
