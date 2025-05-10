@@ -210,4 +210,4 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDM2xUFcTq2jLrf8/K7x0sryZKfDPgUiu/E4sT
 2.Enter "API IP" and "Ingress IP"
 3.Install Cluster
 ```
-> 需等待 2~3 小時
+> 需等待 1~2 小時
