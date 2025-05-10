@@ -210,4 +210,10 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDM2xUFcTq2jLrf8/K7x0sryZKfDPgUiu/E4sT
 2.Enter "API IP" and "Ingress IP"
 3.Install Cluster
 ```
-> 需等待 1~2 小時
+> 需等待 1~2 小時，完成後需紀錄密碼
+
+### 驗證
+> 設定DNS為bastion，連至https://console-openshift-console.apps.ocp.andy.com/
+```
+檢查"Compute" - "Nodes"，是否有三個MAster及三個Worker，並確認Status為Ready
+```
