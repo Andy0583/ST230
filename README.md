@@ -1,2 +1,2 @@
 
-[![圖片](https://i.imgur.com/NxOcfuD.png)]
+![圖片](https://i.imgur.com/NxOcfuD.png)
