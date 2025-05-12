@@ -10,4 +10,4 @@
 * 此LAB皆於OCP 4.18以上環境測試，無法確保舊版本可用性。
 * 純興趣分享，不保證作法絕對正確，請大家斟酌參考。
   
-![](https://github.com/Andy0583/OCP/blob/main/Image/image.jpeg)
+![](https://github.com/Andy0583/OCP/blob/main/Image/image.png)
