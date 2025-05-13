@@ -174,7 +174,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDM2xUFcTq2jLrf8/K7x0sryZKfDPgUiu/E4sT
 ```
 
 
-### 6、建置Master * 4 + Worker * 4
+### 6、建置Master * 3 + Worker * 3
 > Master：4 core / 8GB Mem / 100GB HD(Thin) ; Worker：4 core / 16GB Mem / 100GB HD(Thin)
 > 
 > 需紀錄網卡 Mac address及設定每台VM EnableUUID（如下）
