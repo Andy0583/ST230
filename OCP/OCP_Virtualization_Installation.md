@@ -175,8 +175,10 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDM2xUFcTq2jLrf8/K7x0sryZKfDPgUiu/E4sT
 
 
 ### 6、建置Master * 3 + Worker * 3
-> Master + Worker：16 core / 32GB Mem / 300GB HD(Thin) 
+> Master + Worker：16 core / 32GB Mem / 300GB HD(Thin)
+
 > CPU：Expose hardware assisted virtualization to the guest OS
+
 > 需紀錄網卡 Mac address及設定每台VM EnableUUID（如下）
 ```
 1.Open the Host Client, and log in to the ESXi.
@@ -249,5 +251,5 @@ master-3   Ready    control-plane,master   9h    v1.31.7
 worker-1   Ready    worker                 8h    v1.31.7
 worker-2   Ready    worker                 8h    v1.31.7
 worker-3   Ready    worker                 8h    v1.31.7
-
 ```
+備註：OCPv需建立VolumeSnapshotClass
