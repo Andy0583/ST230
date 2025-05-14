@@ -2,6 +2,7 @@
 ### 目錄
 * OCP安裝：[OCP Installation](<https://github.com/Andy0583/OCP/blob/main/OCP/OCP_Installation.md>)
 * OCP(單機版)安裝：[OCP SNO Installation](<https://github.com/Andy0583/OCP/blob/main/OCP/OCP_SNO_Installation.md>)
+* OCPv安裝：[OCP Virtualization Installation](<https://github.com/Andy0583/OCP/blob/main/OCP/OCP_Virtualization_Installation.md>)
 * Unity CSI安裝：[Unity CSI Installation](<https://github.com/Andy0583/OCP/blob/main/CSI/UnityCSI_Installation.md>)
 * Unity CSI實作：[Unity CSI Testing](<https://github.com/Andy0583/OCP/blob/main/CSI/UnityCSI_Testing.md>)
 * VMWare Harbor安裝：[Harbor Installation](<https://github.com/Andy0583/OCP/blob/main/Third_party/Harbor_Installation.md>)
