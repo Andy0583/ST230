@@ -7,3 +7,4 @@
 * 可於OCP安裝過程中一同安裝，亦可於裝完後再行安裝，本LAB採用OCP安裝後再行安裝Virtualization
 
 
+oc login api.ocp.andy.com:6443 -u kubeadmin -p RXreJ-dS3Gr-G2fwm-Wu3bx
