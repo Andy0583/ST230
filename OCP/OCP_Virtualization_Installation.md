@@ -8,5 +8,8 @@
 * 從OCP console -> "Operator" -> "OperatorHub" -> 搜尋『Virtualization』 -> 點選"OpenShift Virtualization"
 * 於OpenShift Virtualization中點選 "Install"  
   ![](https://github.com/Andy0583/OCP/blob/main/Image/ocp-1.png)
-* 再點選 "Install" ，點選"Create HyperConverged"  
-  ![](https://github.com/Andy0583/OCP/blob/main/Image/ocp-2.png)
+* 再點選 "Install" ，點選"Create HyperConverged" -> "Create"  
+  ![](https://github.com/Andy0583/OCP/blob/main/Image/ocp-2.png?raw=true)
+* 等待出現下圖後，點選"Refresh Web Console"  
+  ![](https://github.com/Andy0583/OCP/blob/main/Image/ocp-3.png?raw=true)
+* 查看Web Console左側導覽列上，是否新增"Virtualization"  
