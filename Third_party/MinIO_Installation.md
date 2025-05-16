@@ -226,4 +226,4 @@ webui   webui-minio-ocp.apps.ocp.andy.com          minio-webui   webui          
 * 設定S3 Browser連接  
   ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-4.png?raw=true)
 * 查看是否有剛建立Bucket，並上傳檔案至Bucket內  
-  ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-ㄓ.png?raw=true)
+  ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-5.png?raw=true)
