@@ -214,16 +214,15 @@ webui   webui-minio-ocp.apps.ocp.andy.com          minio-webui   webui          
 ```
 
 ### 6、MinIO設定
-* 開啟 http://webui-minio-ocp.apps.ocp.andy.com/  
+* 開啟 http://webui-minio-ocp.apps.ocp.andy.com/，輸入minioadmin / minioadmin，點選"Login"</p>
   ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-1.png?raw=true)    
-* 輸入Username: minioadmin / Password: minioadmin，點選"Login"
-* Create Bucket (名稱不接受大寫)  
+* Create Bucket (名稱不接受大寫)</p>
   ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-2.png?raw=true)
-* Create Access Key（Key自動產生無須修改，必需紀錄）  
+* Create Access Key（Key自動產生無須修改，必需紀錄）</p>
   ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-3.png?raw=true)
 
 ### 7、MinIO測試
-* 設定S3 Browser連接  
+* 設定S3 Browser連接</p>
   ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-4.png?raw=true)
-* 查看是否有剛建立Bucket，並上傳檔案至Bucket內  
+* 查看是否有剛建立Bucket，並上傳檔案至Bucket內</p>
   ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-5.png?raw=true)
