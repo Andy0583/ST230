@@ -191,6 +191,6 @@ NAME       HOST/PORT                            PATH   SERVICES        PORT   TE
 minio-ui   minio-ui-default.apps.ocp.andy.com          minio-service   ui     edge/Redirect   None
 ```
 ### 2、MinIO設定
-* 開啟 https://minio-ui-minio.apps.ocp.andy.com/login
+* 開啟 https://minio-ui-minio.apps.ocp.andy.com/login  
   ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-1.png?raw=true)    
 * 輸入Username: minio / Password: minio123，點選"Login"
