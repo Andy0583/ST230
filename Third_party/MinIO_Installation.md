@@ -12,8 +12,8 @@ metadata:
 namespace/minio-ocp created
 
 [root@bastion ~]# oc get ns
-NAME                                               STATUS   AGE
-minio-ocp                                          Active   3h31m
+NAME          STATUS   AGE
+minio-ocp     Active   3h31m
 ```
 
 ### 2、建立PVC
