@@ -2,15 +2,12 @@
 * OCPv測試需搭配CSI StorageClass / VolumeSnapshotClass
 * 準備相關ISO檔案，需上傳至OCP PVC中
 
-### 2、VM建置
-* 可於OCP安裝過程中一同安裝，亦可於裝完後再行安裝，本LAB採用OCP安裝後再行安裝Virtualization
-* 從OCP console -> "Operator" -> "OperatorHub" -> 搜尋『Virtualization』 -> 點選"OpenShift Virtualization"
-* 於OpenShift Virtualization中點選 "Install"  
-  ![](https://github.com/Andy0583/OCP/blob/main/Image/ocp-1.png)
-* 再點選 "Install" ，點選"Create HyperConverged" -> "Create"  
-  ![](https://github.com/Andy0583/OCP/blob/main/Image/ocp-2.png?raw=true)
-* 等待出現下圖後，點選"Refresh Web Console"  
-  ![](https://github.com/Andy0583/OCP/blob/main/Image/ocp-3.png?raw=true)
-* 查看Web Console左側導覽列上，是否新增"Virtualization"
-* 第一次建立PVC，需點  https://cdi-uploadproxy-openshift-cnv.apps.ocp.andy.com/v1beta1/upload-form-async  
-  (需依據自己網域名稱修改網址)
+### 2、建置Bootable Volumes
+* OCP console -> "Virtualization" -> "Bootable Volumes" -> "Add Volume" -> "With form"
+  ![](https://github.com/Andy0583/OCP/blob/main/Image/ocp/ocp-5.png)   
+  ![](https://github.com/Andy0583/OCP/blob/main/Image/ocp/ocp-6.png)
+* 查看進度條，等待ISO上傳完成
+
+### 3、VM建置
+* OCP console -> "Virtualization" -> "VirtualMachines" -> "Create VirtualMachines" -> "From InstanceType" 
+
