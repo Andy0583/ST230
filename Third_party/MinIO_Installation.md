@@ -194,3 +194,7 @@ minio-ui   minio-ui-default.apps.ocp.andy.com          minio-service   ui     ed
 * 開啟 https://minio-ui-minio.apps.ocp.andy.com/login  
   ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-1.png?raw=true)    
 * 輸入Username: minio / Password: minio123，點選"Login"
+* Create Bucket (名稱不接受大寫)  
+  ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-2.png?raw=true)
+* Create Access Key（Key自動產生無須修改）  
+  ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-3.png?raw=true)
