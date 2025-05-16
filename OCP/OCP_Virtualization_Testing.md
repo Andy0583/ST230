@@ -1,9 +1,8 @@
 ### 1、環境需求
-* Master + Worker：16 core / 32GB Mem / 300GB HD(Thin)
-* CPU：Expose hardware assisted virtualization to the guest OS
-* OCPv需搭配CSI StorageClass / VolumeSnapshotClass
+* OCPv測試需搭配CSI StorageClass / VolumeSnapshotClass
+* 準備相關ISO檔案，需上傳至OCP PVC中
 
-### 2、Virtualization安裝
+### 2、VM建置
 * 可於OCP安裝過程中一同安裝，亦可於裝完後再行安裝，本LAB採用OCP安裝後再行安裝Virtualization
 * 從OCP console -> "Operator" -> "OperatorHub" -> 搜尋『Virtualization』 -> 點選"OpenShift Virtualization"
 * 於OpenShift Virtualization中點選 "Install"  
