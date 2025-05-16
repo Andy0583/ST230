@@ -10,7 +10,7 @@
 * Veeam K10安裝：[Veeam K10 Installation](<https://github.com/Andy0583/OCP/blob/main/Third_party/Veeam_K10_Installation.md>)
 * MinIO 安裝：[Veeam K10 Installation](<https://github.com/Andy0583/OCP/blob/main/Third_party/MinIO_Installation.md>)
 ---
-* 此LAB皆於OCP 4.18以上環境測試，無法確保舊版本可用性。
+* 此LAB所有軟體皆安裝於OCP 4.18以上環境，無法確認舊版本的可用性。
 * 純興趣分享，不保證作法絕對正確，只能確保在LAB上可行，請大家斟酌參考。
   
 ![](https://github.com/Andy0583/OCP/blob/main/Image/1.png)
