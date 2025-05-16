@@ -12,5 +12,5 @@
 * 等待出現下圖後，點選"Refresh Web Console"  
   ![](https://github.com/Andy0583/OCP/blob/main/Image/ocp/ocp-3.png?raw=true)
 * 查看Web Console左側導覽列上，是否新增"Virtualization"
-* 第一次建立PVC，需連線一次下列網址  
+* 第一次建立PVC，系統會要求連線一次下列網址  
   ![](https://github.com/Andy0583/OCP/blob/main/Image/ocp/ocp-4.png?raw=true)
