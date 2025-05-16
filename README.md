@@ -11,8 +11,9 @@
 * MinIO 安裝：[MinIO_Installation](<https://github.com/Andy0583/OCP/blob/main/Third_party/MinIO_Installation.md>)
 ---
 * 此LAB所有軟體皆安裝於OCP 4.18以上環境，無法確認舊版本的可用性。
-* 純興趣分享，不保證作法絕對正確，只能確保在LAB上可行，請大家斟酌參考。  
+* 純興趣分享，不保證作法絕對正確，只能確保在LAB上可行，請大家斟酌參考。</p>
 ![](https://github.com/Andy0583/OCP/blob/main/Image/2.png)
-</br>
-By Andy Hsu (andy0583@gmail.com)
+</p>
+By Andy Hsu</p>
+andy0583@gmail.com
 
