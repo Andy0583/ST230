@@ -1,14 +1,28 @@
-### 1、安裝MinIO
+### 1、建立NameSpace
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: minio-ocp
+  labels:
+    name: minio-ocp
 ```
-[root@bastion ~]# oc create ns minio
-namespace/minio created
 ```
+[[root@bastion ~]# oc create -f ns.yaml
+namespace/minio-ocp created
+
+[root@bastion ~]# oc get ns
+NAME                                               STATUS   AGE
+minio-ocp                                          Active   3h31m
 ```
-[root@bastion ~]# cat > ~/minio.yaml << EOF
+
+### 2、建立PVC
+```yaml
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: minio-pvc
+  name: minio-ocp
+  namespace: minio-ocp
 spec:
   storageClassName: sc-unity
   accessModes:
@@ -17,21 +31,25 @@ spec:
     requests:
       storage: 20Gi
   volumeMode: Filesystem
----
-kind: Secret
-apiVersion: v1
-metadata:
-  name: minio-secret
-stringData:
-  # change the username and password to your own values.
-  # ensure that the user is at least 3 characters long and the password at least 8
-  minio_root_user: minio
-  minio_root_password: minio123
----
+```
+```
+[root@bastion ~]# oc create -f pvc.yaml
+persistentvolumeclaim/minio-ocp created
+
+[root@bastion ~]# oc get pvc -n minio-ocp
+NAME        STATUS   VOLUME              CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+minio-ocp   Bound    csivol-f66d75e2d6   20Gi       RWX            sc-unity       <unset>                 2m22s
+```
+
+### 3、建立Minio
+```yaml
 kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: minio
+  namespace: minio-ocp
+  annotations:
+    deployment.kubernetes.io/revision: '1'
 spec:
   replicas: 1
   selector:
@@ -44,157 +62,168 @@ spec:
         app: minio
     spec:
       volumes:
-        - name: data
+        - name: minio-ocp
           persistentVolumeClaim:
-            claimName: minio-pvc
+            claimName: minio-ocp
       containers:
-        - resources:
-            limits:
-              cpu: 250m
-              memory: 1Gi
-            requests:
-              cpu: 20m
-              memory: 100Mi
+        - resources: {}
           readinessProbe:
             tcpSocket:
-              port: 9000
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
-            periodSeconds: 5
+              port: 9090
+            timeoutSeconds: 5
+            periodSeconds: 10
             successThreshold: 1
             failureThreshold: 3
           terminationMessagePath: /dev/termination-log
-          name: minio
-          livenessProbe:
-            tcpSocket:
-              port: 9000
-            initialDelaySeconds: 30
-            timeoutSeconds: 1
-            periodSeconds: 5
-            successThreshold: 1
-            failureThreshold: 3
-          env:
-            - name: MINIO_ROOT_USER
-              valueFrom:
-                secretKeyRef:
-                  name: minio-secret
-                  key: minio_root_user
-            - name: MINIO_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: minio-secret
-                  key: minio_root_password
+          name: container
+          command:
+            - /bin/bash
+            - '-c'
           ports:
-            - containerPort: 9000
-              protocol: TCP
             - containerPort: 9090
+              protocol: TCP
+            - containerPort: 9000
               protocol: TCP
           imagePullPolicy: IfNotPresent
           volumeMounts:
-            - name: data
+            - name: minio-ocp
               mountPath: /data
-              subPath: minio
           terminationMessagePolicy: File
-          image: >-
-            quay.io/minio/minio:latest
+          image: 'quay.io/minio/minio:latest'
           args:
-            - server
-            - /data
-            - --console-address
-            - :9090
+            - 'minio server /data --console-address :9090'
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
+      nodeSelector:
+        node-role.kubernetes.io/worker: ''
       securityContext: {}
       schedulerName: default-scheduler
   strategy:
-    type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
   revisionHistoryLimit: 10
   progressDeadlineSeconds: 600
+```
+```
+[root@bastion ~]# oc create -f minio-ocp.yaml
+deployment.apps/minio created
+
+[root@bastion ~]# oc get pod -n minio-ocp
+NAME                     READY   STATUS    RESTARTS   AGE
+minio-76f9577994-bz5tw   1/1     Running   0          39s
+
+[root@bastion ~]#  oc describe pod/minio-76f9577994-bz5tw -n minio-ocp | grep server
+      minio server /data --console-address :9090
+```
+
+### 4、建立SVC
+```yaml
+kind: Service
+apiVersion: v1
+metadata:
+  name: minio-webui
+  namespace: minio-ocp
+  labels:
+    app: minio
+spec:
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+      name: webui
+  type: ClusterIP
+  selector:
+    app: minio
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: minio-service
+  name: minio-api
+  namespace: minio-ocp
+  labels:
+    app: minio
 spec:
-  ipFamilies:
-    - IPv4
   ports:
-    - name: api
-      protocol: TCP
+    - protocol: TCP
       port: 9000
       targetPort: 9000
-    - name: ui
-      protocol: TCP
-      port: 9090
-      targetPort: 9090
-  internalTrafficPolicy: Cluster
+      name: api
   type: ClusterIP
-  ipFamilyPolicy: SingleStack
-  sessionAffinity: None
   selector:
     app: minio
+```
+```
+[root@bastion ~]# oc create -f minio-svc.yaml
+service/minio-webui created
+service/minio-api created
+
+[root@bastion ~]# oc get svc -n minio-ocp
+NAME          TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+minio-api     ClusterIP   172.30.30.90   <none>        9000/TCP   18s
+minio-webui   ClusterIP   172.30.50.56   <none>        9090/TCP   18s
+```
+
+### 5、建立Route
+```yaml
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: webui
+  namespace: minio-ocp
+  labels:
+    app: minio
+spec:
+  host: webui-minio-ocp.apps.ocp.andy.com
+  to:
+    kind: Service
+    name: minio-webui
+    weight: 100
+  port:
+    targetPort: webui
+  wildcardPolicy: None
 ---
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: minio-api
+  name: s3
+  namespace: minio-ocp
+  labels:
+    app: minio
 spec:
+  host: s3-minio-ocp.apps.ocp.andy.com
   to:
     kind: Service
-    name: minio-service
+    name: minio-api
     weight: 100
   port:
     targetPort: api
   wildcardPolicy: None
-  tls:
-    termination: edge
-    insecureEdgeTerminationPolicy: Redirect
----
-kind: Route
-apiVersion: route.openshift.io/v1
-metadata:
-  name: minio-ui
-spec:
-  to:
-    kind: Service
-    name: minio-service
-    weight: 100
-  port:
-    targetPort: ui
-  wildcardPolicy: None
-  tls:
-    termination: edge
-    insecureEdgeTerminationPolicy: Redirect
-EOF
 ```
 ```
-[root@bastion ~]# oc create -f minio.yaml -n minio
-persistentvolumeclaim/minio-pvc created
-secret/minio-secret created
-deployment.apps/minio created
-service/minio-service created
-route.route.openshift.io/minio-api created
-route.route.openshift.io/minio-ui created
-```
-```
-[root@bastion ~]# oc get pod -n minio
-NAME                     READY   STATUS    RESTARTS   AGE
-minio-76449f8dfb-mlmv5   1/1     Running   0          53s
+[root@bastion ~]# oc create -f minio-route.yaml
+route.route.openshift.io/webui created
+route.route.openshift.io/s3 created
 
-[root@bastion ~]# oc get route minio-api -n minio
-NAME        HOST/PORT                             PATH   SERVICES        PORT   TERMINATION     WILDCARD
-minio-api   minio-api-default.apps.ocp.andy.com          minio-service   api    edge/Redirect   None
-
-[root@bastion ~]# oc get route minio-ui -n minio
-NAME       HOST/PORT                            PATH   SERVICES        PORT   TERMINATION     WILDCARD
-minio-ui   minio-ui-default.apps.ocp.andy.com          minio-service   ui     edge/Redirect   None
+[root@bastion ~]# oc get routes -n minio-ocp
+NAME    HOST/PORT                           PATH   SERVICES      PORT    TERMINATION   WILDCARD
+s3      s3-minio-ocp.apps.ocp.andy.com             minio-api     api                   None
+webui   webui-minio-ocp.apps.ocp.andy.com          minio-webui   webui                 None
 ```
-### 2、MinIO設定
-* 開啟 https://minio-ui-minio.apps.ocp.andy.com/login  
+
+### 6、MinIO設定
+* 開啟 http://webui-minio-ocp.apps.ocp.andy.com/  
   ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-1.png?raw=true)    
-* 輸入Username: minio / Password: minio123，點選"Login"
+* 輸入Username: minioadmin / Password: minioadmin，點選"Login"
 * Create Bucket (名稱不接受大寫)  
   ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-2.png?raw=true)
-* Create Access Key（Key自動產生無須修改）  
+* Create Access Key（Key自動產生無須修改，必需紀錄）  
   ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-3.png?raw=true)
+
+### 7、MinIO測試
+* 設定S3 Browser連接  
+  ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-4.png?raw=true)
+* 查看是否有剛建立Bucket，並上傳檔案至Bucket內  
+  ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-ㄓ.png?raw=true)
