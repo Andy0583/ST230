@@ -13,4 +13,5 @@
 * 等待出現下圖後，點選"Refresh Web Console"  
   ![](https://github.com/Andy0583/OCP/blob/main/Image/ocp-3.png?raw=true)
 * 查看Web Console左側導覽列上，是否新增"Virtualization"
-* 第一次建立PVC，需點至：https://cdi-uploadproxy-openshift-cnv.apps.ocp.andy.com/v1beta1/upload-form-async（需修改自己的網域名稱)
+* 第一次建立PVC，需點  https://cdi-uploadproxy-openshift-cnv.apps.ocp.andy.com/v1beta1/upload-form-async  
+  (需依據自己網域名稱修改網址)
