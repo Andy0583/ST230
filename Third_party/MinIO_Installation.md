@@ -190,24 +190,7 @@ minio-api   minio-api-default.apps.ocp.andy.com          minio-service   api    
 NAME       HOST/PORT                            PATH   SERVICES        PORT   TERMINATION     WILDCARD
 minio-ui   minio-ui-default.apps.ocp.andy.com          minio-service   ui     edge/Redirect   None
 ```
-### 2、網路設定
-```
-[root@bastion veeam]# kubectl edit svc gateway -n k10
-  ports:
-  - name: http
-    nodePort: 30000
-    port: 80
-    protocol: TCP
-    targetPort: 8000
-  selector:
-    service: gateway
-  sessionAffinity: None
-  type: LoadBalancer
-```
-> 開啟Web http://172.12.25.45:30000/k10/#/dashboard
-
-### 3、移除Veeam K10
-```
-[root@bastion veeam]# helm uninstall k10 -n k10
-release "k10" uninstalled
-```
+### 2、MinIO設定
+* 開啟 https://minio-ui-minio.apps.ocp.andy.com/login
+  ![](https://github.com/Andy0583/OCP/blob/main/Image/mino/minio-1.png?raw=true)    
+* 輸入Username: minio / Password: minio123，點選"Login"
