@@ -84,20 +84,29 @@ state-svc-8f78997f5-wn4rm                2/2     Running   0          3m58s
 ```
 
 ### 2、網路設定
-```
-[root@bastion veeam]# oc edit svc gateway -n k10
-  ports:
-  - name: http
-    nodePort: 30000
-    port: 80
-    protocol: TCP
-    targetPort: 8000
-  selector:
+```yaml
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: k10
+  namespace: k10
+  labels:
     service: gateway
-  sessionAffinity: None
-  type: LoadBalancer
+spec:
+  host: k10.apps.ocp.andy.com
+  to:
+    kind: Service
+    name: gateway
+    weight: 100
+  port:
+    targetPort: http
+  wildcardPolicy: None
 ```
-> 開啟Web http://172.12.25.45:30000/k10/#/dashboard
+```
+[root@bastion ~]# oc create -f route-k10.yaml
+route.route.openshift.io/k10 created
+```
+> 開啟Web http://k10.apps.ocp.andy.com/k10/#/dashboard/
 
 ### 3、移除Veeam K10
 ```
