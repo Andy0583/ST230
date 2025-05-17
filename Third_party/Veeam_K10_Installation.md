@@ -37,7 +37,12 @@ sc-unity-iscsi   csi-unity.dellemc.com   Delete          Immediate           tru
 [root@bastion veeam]# oc annotate storageclass sc-unity k10.kasten.io/volume-snapshot-class=k10-snapclass
 storageclass.storage.k8s.io/sc-unity annotated
 
-[root@bastion veeam]# helm install k10 kasten/k10 --namespace k10 --set global.persistence.storageClass=sc-unity --set eula.accept=true --set eula.company="Ginnet" --set eula.email="andyhsu@ginnet.com.tw"
+[root@bastion veeam]#
+helm install k10 kasten/k10 --namespace k10 \
+--set global.persistence.storageClass=sc-unity \
+--set eula.accept=true \
+--set eula.company="Ginnet" \
+--set eula.email="andyhsu@ginnet.com.tw"
 NAME: k10
 LAST DEPLOYED: Sun May 11 17:17:24 2025
 NAMESPACE: k10
