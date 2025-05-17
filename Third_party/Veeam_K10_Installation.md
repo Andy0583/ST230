@@ -1,6 +1,6 @@
 ### 1、安裝Veeam K10
 ```
-[root@bastion veeam]# kubectl create ns k10
+[root@bastion veeam]# oc create ns k10
 namespace/k10 created
 
 [root@bastion veeam]# helm repo add aliyun https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
@@ -26,7 +26,7 @@ EOF
 NAME              DRIVER                  DELETIONPOLICY   AGE
 snapclass-unity   csi-unity.dellemc.com   Delete           19h
 
-[root@bastion veeam]# kubectl annotate volumesnapshotclass snapclass-unity k10.kasten.io/is-snapshot-class=true
+[root@bastion veeam]# oc annotate volumesnapshotclass snapclass-unity k10.kasten.io/is-snapshot-class=true
 volumesnapshotclass.snapshot.storage.k8s.io/snapclass-unity annotated
 
 [root@bastion veeam]# oc get sc
@@ -34,10 +34,10 @@ NAME             PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE   ALL
 sc-unity         csi-unity.dellemc.com   Delete          Immediate           true                   19h
 sc-unity-iscsi   csi-unity.dellemc.com   Delete          Immediate           true                   19m
 
-[root@bastion veeam]# kubectl annotate storageclass sc-unity-iscsi k10.kasten.io/volume-snapshot-class=k10-snapclass
+[root@bastion veeam]# oc annotate storageclass sc-unity k10.kasten.io/volume-snapshot-class=k10-snapclass
 storageclass.storage.k8s.io/sc-unity annotated
 
-[root@bastion veeam]# helm install k10 kasten/k10 --namespace k10 --set global.persistence.storageClass=sc-unity-iscsi --set eula.accept=true --set eula.company="Ginnet" --set eula.email="andyhsu@ginnet.com.tw"
+[root@bastion veeam]# helm install k10 kasten/k10 --namespace k10 --set global.persistence.storageClass=sc-unity --set eula.accept=true --set eula.company="Ginnet" --set eula.email="andyhsu@ginnet.com.tw"
 NAME: k10
 LAST DEPLOYED: Sun May 11 17:17:24 2025
 NAMESPACE: k10
@@ -79,7 +79,7 @@ state-svc-8f78997f5-wn4rm                2/2     Running   0          3m58s
 
 ### 2、網路設定
 ```
-[root@bastion veeam]# kubectl edit svc gateway -n k10
+[root@bastion veeam]# oc edit svc gateway -n k10
   ports:
   - name: http
     nodePort: 30000
