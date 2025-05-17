@@ -42,7 +42,8 @@ helm install k10 kasten/k10 --namespace k10 \
 --set global.persistence.storageClass=sc-unity \
 --set eula.accept=true \
 --set eula.company="Ginnet" \
---set eula.email="andyhsu@ginnet.com.tw"
+--set eula.email="andyhsu@ginnet.com.tw"**
+
 NAME: k10
 LAST DEPLOYED: Sun May 11 17:17:24 2025
 NAMESPACE: k10
