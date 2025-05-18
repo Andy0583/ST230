@@ -39,10 +39,10 @@ Connection to worker-1.ocp.andy.com closed.
 ### 3、修改相關參數
 ```
 [root@bastion ~]# vi ~/SCG/SCG/values.yaml
-	storageClassName: sc-unity
-	TimeZone: Asia/Taipei
-	IpAddress: 172.30.100.100
-    Type: LoadBalancer
+storageClassName: sc-unity
+TimeZone: Asia/Taipei
+IpAddress: 172.30.100.100
+Type: LoadBalancer
 
 [root@bastion ~]# oc label node/worker-1 kubernetes.io/hostname=crc --overwrite
 node/worker-1 labeled
@@ -104,7 +104,6 @@ route.route.openshift.io/scg created
 [root@bastion ~]# oc get route -n scg
 NAME   HOST/PORT               PATH   SERVICES   PORT   TERMINATION            WILDCARD
 scg    scg.apps.ocp.andy.com          scg-app    5700   passthrough/Redirect   None
-
 ```
 ### 6、驗證
 ```
