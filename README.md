@@ -6,6 +6,7 @@
 * OCPv實作：[OCP Virtualization Testing](<https://github.com/Andy0583/OCP/blob/main/OCP/OCP_Virtualization_Testing.md>)
 * Unity CSI安裝：[Unity CSI Installation](<https://github.com/Andy0583/OCP/blob/main/CSI/UnityCSI_Installation.md>)
 * Unity CSI實作：[Unity CSI Testing](<https://github.com/Andy0583/OCP/blob/main/CSI/UnityCSI_Testing.md>)
+* Dell SCG 離線安裝：[Dell SCG Installation](<https://github.com/Andy0583/OCP/blob/main/Third_party/Dell_SCG_Installation.md>)
 * VMWare Harbor安裝：[Harbor Installation](<https://github.com/Andy0583/OCP/blob/main/Third_party/Harbor_Installation.md>)
 * MinIO 安裝：[MinIO_Installation](<https://github.com/Andy0583/OCP/blob/main/Third_party/MinIO_Installation.md>)
 * Veeam K10安裝：[Veeam K10 Installation](<https://github.com/Andy0583/OCP/blob/main/Third_party/Veeam_K10_Installation.md>)
