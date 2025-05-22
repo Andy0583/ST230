@@ -141,7 +141,6 @@ Removal of the CSI Driver is in progress.
 It may take a few minutes for all pods to terminate.
 ```
 
-
 ### 3、若需使用iSCSI需於每台Worker設定
 ```
 [root@bastion ~]# ssh -i ~/.ssh/id_rsa core@172.12.25.47
@@ -160,4 +159,235 @@ Login to [iface: default, target: iqn.1992-04.com.emc:cx.virt2444cbsk5x.a1, port
 [core@worker-3 ~]$ exit
 logout
 Connection to 172.12.25.47 closed.
+```
+
+### 4、StorageClass 
+* Create StorageClass for iSCSI
+```yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sc-unity-iscsi
+provisioner: csi-unity.dellemc.com
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+volumeBindingMode: Immediate
+parameters:
+  protocol: iSCSI
+  arrayId: VIRT2444CBSK5X
+  storagePool: pool_3
+  thinProvisioned: "true"
+  csi.storage.k8s.io/fstype: xfs
+allowedTopologies:
+  - matchLabelExpressions:
+      - key: csi-unity.dellemc.com/VIRT2444CBSK5X-iscsi
+        values:
+          - "true"
+```
+```
+[root@bastion csi-unity]# oc create -f sc-iscsi.yaml
+storageclass.storage.k8s.io/sc-unity-iscsi created
+
+[root@bastion csi-unity]# oc get sc
+NAME             PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+sc-unity-iscsi   csi-unity.dellemc.com   Delete          Immediate           true                   4s
+```
+
+* Create StorageClass for NFS
+```yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sc-unity
+provisioner: csi-unity.dellemc.com
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+volumeBindingMode: Immediate
+parameters:
+  protocol: NFS
+  arrayId: VIRT2444CBSK5X
+  storagePool: pool_3
+  nasServer: nas_6
+  csi.storage.k8s.io/fstype: nfs
+```
+```
+[root@bastion csi-unity]# oc create -f sc.yaml
+storageclass.storage.k8s.io/sc-unity created
+
+[root@bastion csi-unity]# oc get sc
+NAME       PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+sc-unity   csi-unity.dellemc.com   Delete          Immediate           true                   7s
+```
+
+### 5、Snapshot Class
+```yaml
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshotClass
+metadata:
+  name: snapclass-unity
+driver: csi-unity.dellemc.com
+deletionPolicy: Delete
+```
+```
+[root@bastion csi-unity]# oc create -f vsc.yaml
+volumesnapshotclass.snapshot.storage.k8s.io/snapclass-unity created
+
+[root@bastion csi-unity]# oc get volumesnapshotclass
+NAME              DRIVER                  DELETIONPOLICY   AGE
+snapclass-unity   csi-unity.dellemc.com   Delete           34s
+```
+
+### 6、PVC 
+* Create PVC for iSCSI
+```yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: iscsi
+spec:
+  storageClassName: sc-unity-iscsi
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Block
+  resources:
+    requests:
+      storage: 10Gi
+```
+```
+[root@bastion csi-unity]# oc get pvc
+NAME    STATUS   VOLUME              CAPACITY   ACCESS MODES   STORAGECLASS     VOLUMEATTRIBUTESCLASS   AGE
+iscsi   Bound    csivol-518bab2a63   10Gi       RWX            sc-unity-iscsi   <unset>                 23s
+```
+
+* Create PVC for NFS
+```yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mysql-pvc
+  namespace: mysql
+  labels:
+    app: mysql
+spec:
+  storageClassName: sc-unity
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+```
+```
+[root@bastion csi-unity]# oc create ns mysql
+namespace/mysql created
+
+[root@bastion csi-unity]# oc create -f pvc.yaml -n mysql
+persistentvolumeclaim/mysql-pvc created
+
+[root@bastion csi-unity]# oc get pvc -n mysql
+NAME        STATUS   VOLUME              CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+mysql-pvc   Bound    csivol-1a258dce70   10Gi       RWX            sc-unity       <unset>                 29s
+
+```
+
+### 7、Deployment
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deploy
+  namespace: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: mysql:5.6
+        name: mysql
+        env:
+          # Use secret in real usage
+        - name: MYSQL_ROOT_PASSWORD
+          value: P@ssw0rd
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pvc
+```
+```
+[root@bastion csi-unity]# oc create -f dep.yaml -n mysql
+deployment.apps/mysql-deploy created
+
+[root@bastion csi-unity]# oc get Deployment -n mysql
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+mysql-deploy   1/1     1            1           34s
+
+[root@bastion csi-unity]# oc get pod -n mysql
+NAME                            READY   STATUS    RESTARTS   AGE
+mysql-deploy-6c575c5f89-h658r   1/1     Running   0          85s
+
+[root@bastion csi-unity]# oc exec -ti mysql-deploy-6c575c5f89-h658r -n mysql -- /bin/sh
+$ df -h
+Filesystem                                Size  Used Avail Use% Mounted on
+overlay                                   100G   12G   88G  12% /
+tmpfs                                      64M     0   64M   0% /dev
+shm                                        64M     0   64M   0% /dev/shm
+tmpfs                                     1.6G   86M  1.5G   6% /etc/passwd
+/dev/sda4                                 100G   12G   88G  12% /etc/hosts
+172.12.25.32:/csishare-csivol-1a258dce70   12G  1.7G  9.9G  15% /var/lib/mysql
+tmpfs                                     6.7G   20K  6.7G   1% /run/secrets/kubernetes.io/serviceaccount
+devtmpfs                                  4.0M     0  4.0M   0% /proc/keys
+$ exit
+```
+
+### 8、Service
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: mysql
+spec:
+  selector:
+    app: mysql
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      nodePort: 30306
+      port: 3306
+```
+```
+[root@bastion csi-unity]# oc create -f svc.yaml
+service/mysql created
+
+[root@bastion csi-unity]# oc get svc -n mysql
+NAME    TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+mysql   LoadBalancer   172.30.62.251   <pending>     3306:30306/TCP   22s
+
+[root@bastion csi-unity]# yum install mysql -y
+
+[root@bastion csi-unity]# mysql -h 172.12.25.45 -P 30306 -pP@ssw0rd
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.6.51 MySQL Community Server (GPL)
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> exit
+Bye
 ```
