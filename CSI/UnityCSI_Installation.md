@@ -1,4 +1,5 @@
-### 1、安裝Unity CSI
+### 安裝Unity CSI
+---
 ```
 [root@bastion ~]# curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
@@ -133,7 +134,8 @@ unity-node-lgcf6                    2/2     Running   0               5m14s
 unity-node-zvzfv                    2/2     Running   0               5m14s
 ```
 
-### 2、移除Unity CSI
+### 移除Unity CSI
+---
 ```
 [root@bastion dell-csi-helm-installer]# ./csi-uninstall.sh --namespace unity-csi
 release "unity" uninstalled
@@ -141,7 +143,8 @@ Removal of the CSI Driver is in progress.
 It may take a few minutes for all pods to terminate.
 ```
 
-### 3、若需使用iSCSI需於每台Worker設定
+### iSCSI設定
+---
 ```
 [root@bastion ~]# ssh -i ~/.ssh/id_rsa core@172.12.25.47
 The authenticity of host '172.12.25.47 (172.12.25.47)' can't be established.
@@ -161,7 +164,8 @@ logout
 Connection to 172.12.25.47 closed.
 ```
 
-### 4、StorageClass 
+### StorageClass 
+---
 * Create StorageClass for iSCSI
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -219,7 +223,8 @@ NAME       PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLU
 sc-unity   csi-unity.dellemc.com   Delete          Immediate           true                   7s
 ```
 
-### 5、Snapshot Class
+### Snapshot Class
+---
 ```yaml
 apiVersion: snapshot.storage.k8s.io/v1
 kind: VolumeSnapshotClass
@@ -237,7 +242,8 @@ NAME              DRIVER                  DELETIONPOLICY   AGE
 snapclass-unity   csi-unity.dellemc.com   Delete           34s
 ```
 
-### 6、PVC 
+### PVC
+---
 * Create PVC for iSCSI
 ```yaml
 kind: PersistentVolumeClaim
@@ -289,7 +295,8 @@ mysql-pvc   Bound    csivol-1a258dce70   10Gi       RWX            sc-unity     
 
 ```
 
-### 7、Deployment
+### Deployment
+---
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -351,7 +358,8 @@ devtmpfs                                  4.0M     0  4.0M   0% /proc/keys
 $ exit
 ```
 
-### 8、Service
+### Service
+---
 ```yaml
 apiVersion: v1
 kind: Service
