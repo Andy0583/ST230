@@ -1,14 +1,14 @@
-### 1、將RHEL ISO上傳至bastion中
+### 將RHEL ISO上傳至bastion中
+---
 ```
-[root@bastion ~]# mkdir /var/repo
+mkdir /var/repo
+mount -o loop rhel-baseos-9.1-x86_64-dvd.iso /var/repo/
+```
 
-[root@bastion ~]# mount -o loop rhel-baseos-9.1-x86_64-dvd.iso /var/repo/
-mount: /var/repo: WARNING: source write-protected, mounted read-only.
-```
-
-### 2、設定Repository
-```
-[root@bastion ~]# cat > /etc/yum.repos.d/rhel9-local.repo << EOF
+### 設定Repository
+---
+```yaml
+cat > /etc/yum.repos.d/rhel9-local.repo << EOF
 [Local-BaseOS]
 name=Red Hat Enterprise Linux 9 - BaseOS
 metadata_expire=-1
@@ -24,20 +24,15 @@ enabled=1
 baseurl=file:///var/repo//AppStream/
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 EOF
-
-[root@bastion ~]# yum clean all
-Updating Subscription Management repositories.
-Unable to read consumer identity
-This system is not registered with an entitlement server. You can use subscription-manager to register.
-0 files removed
-
-[root@bastion ~]# subscription-manager clean
-All local data removed
-
-[root@bastion ~]# sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/subscription-manager.conf
+```
+```
+yum clean all
+subscription-manager clean
+sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/subscription-manager.conf
 ```
 
-### 3、關閉防火牆
+### 關閉防火牆
+---
 ```
 [root@bastion ~]# systemctl stop firewalld
 
