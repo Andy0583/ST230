@@ -168,6 +168,7 @@ Connection to 172.12.25.47 closed.
 ---
 * Create StorageClass for iSCSI
 ```yaml
+cat << EOF > sc-unity-iscsi.yaml
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -187,6 +188,7 @@ allowedTopologies:
       - key: csi-unity.dellemc.com/VIRT2444CBSK5X-iscsi
         values:
           - "true"
+EOF
 ```
 ```
 [root@bastion csi-unity]# oc create -f sc-iscsi.yaml
@@ -246,6 +248,7 @@ snapclass-unity   csi-unity.dellemc.com   Delete           34s
 ---
 * Create PVC for iSCSI
 ```yaml
+cat << EOF > sc-unity-iscsi.yaml
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -258,6 +261,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
+EOF
 ```
 ```
 [root@bastion csi-unity]# oc get pvc
