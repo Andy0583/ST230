@@ -1,6 +1,6 @@
 ### 前置作業
 ---
-> Master/Woerker皆需執行
+> 準備三台Ubuntu VM
 ```
 sudo ufw disable
 sudo passwd root
@@ -14,29 +14,26 @@ apt update -y && apt upgrade -y
 
 ### 修改Hostname及Hosts
 ---
-* Master/Woerker皆需執行
-* 依據環境不同修改Host Name及”hosts”
-
+> 依據環境不同修改Host Name及”hosts”
 ```
 hostnamectl set-hostname "k8s1.andy.com"
 cat >> /etc/hosts << EOF
-192.168.0.231 k8s1.andy.com
-192.168.0.232 k8s2.andy.com
-192.168.0.233 k8s3.andy.com
+172.12.25.51 k8s1.andy.com
+172.12.25.52 k8s2.andy.com
+172.12.25.53 k8s3.andy.com
 EOF
 ```
 
-
-### 3.永久關閉Swap
-* Master/Woerker皆需執行
+### 永久關閉Swap
+---
 ```
 swapoff -a
 sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 ```
 
 
-### 4.安裝K8S
-* Master/Woerker皆需執行
+### 安裝K8S
+---
 ```
 cat <<EOF | tee /etc/modules-load.d/k8s.conf
 overlay
