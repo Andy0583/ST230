@@ -49,7 +49,8 @@ net.ipv4.ip_forward = 1
 EOF
 
 sysctl --system
-
+```
+```
 apt-get -y install \
     ca-certificates \
     curl \
@@ -67,7 +68,7 @@ echo \
 apt-get update
 ```
 
-* 安裝Containerd.io 容器化運行平台。
+> 安裝Containerd.io 容器化運行平台
 ```
 apt-get install containerd.io  
 containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
@@ -76,26 +77,23 @@ systemctl restart containerd
 systemctl enable containerd
 ```
 
-* 請依據所需K8S版本號碼輸入，並進行安裝kubelet、kubeadm、kubectl。
+> 請依據所需K8S版本號碼輸入，並進行安裝kubelet、kubeadm、kubectl。
 ```
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 apt-get update
 apt-cache madison kubelet
 apt install -y kubelet kubeadm  kubectl
 apt-mark hold kubelet kubeadm kubectl
-
 modprobe br_netfilter
 ```
 
-
-### 5.K8S初始化
-* 於Master執行
-* control-plane-endpoint請輸入Master IP，pod-network-cidr維持預設，為Pod內部使用IP(最多可使用65,536個)。
+### K8S初始化
+> K8S初始化僅針對Master執行，control-plane-endpoint請輸入Master IP
 ```
-kubeadm init --control-plane-endpoint="192.168.0.231" --pod-network-cidr=10.244.0.0/16
+kubeadm init --control-plane-endpoint="172.12.25.51" --pod-network-cidr=10.244.0.0/16
 ```
-* 紀錄下圖"Then you can join any number of worker nodes by running the following on each as root"資訊
+> 紀錄下圖"Then you can join any number of worker nodes by running the following on each as root"資訊
   
 ![](https://github.com/Andy0583/Dell-CSI-for-Powerstore/blob/main/image/001.png?raw=true)
 
