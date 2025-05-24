@@ -7,7 +7,7 @@ mount -o loop rhel-baseos-9.1-x86_64-dvd.iso /var/repo/
 
 ### 設定Repository
 ---
-```yaml
+```
 cat > /etc/yum.repos.d/rhel9-local.repo << EOF
 [Local-BaseOS]
 name=Red Hat Enterprise Linux 9 - BaseOS
@@ -45,14 +45,12 @@ Removed "/etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service".
 [root@bastion ~]# sed -i 's/enforcing/disabled/' /etc/selinux/config
 ```
 
-### 4、安裝Bind
+### 安裝Bind
 ```
-[root@bastion ~]# yum install bind bind-utils -y
-Red Hat Enterprise Linux 9 - BaseOS
-.......略........
-Complete!
-
-[root@bastion ~]# vi /etc/named.conf
+yum install bind bind-utils -y
+```
+```shell
+vi /etc/named.conf
 options {
         listen-on port 53 { any; };
 #       listen-on-v6 port 53 { ::1; };
@@ -71,7 +69,7 @@ zone "25.12.172.in-addr.arpa" IN {
 };
 ```
 ```
-[root@bastion ~]# vi /var/named/named.ocp.andy.com
+cat > /var/named/named.ocp.andy.com << EOF
 $TTL 1D
 @       IN SOA  @ bastion.ocp.andy.com. (
                                         2020040819      ; serial
@@ -90,9 +88,10 @@ worker-2        IN      A       172.12.25.46
 worker-3        IN      A       172.12.25.47
 api             IN      A       172.12.25.48
 *.apps          IN      A       172.12.25.49
+EOF
 ```
 ```
-[root@bastion ~]# vi /var/named/rev.25.12.172
+cat > /var/named/rev.25.12.172 << EOF
 $TTL 1D
 @       IN SOA  @ bastion.ocp.andy.com. (
                                         2020040819      ; serial
@@ -111,28 +110,16 @@ $TTL 1D
 47   IN      PTR     worker-3.ocp.andy.com.
 48   IN      PTR     api.ocp.andy.com.
 49   IN      PTR     apps.ocp.andy.com.
+EOF
 ```
 ```
-[root@bastion ~]# chgrp named /var/named/named.ocp.andy.com
-
-[root@bastion ~]# chmod 640 /var/named/named.ocp.andy.com
-
-[root@bastion ~]# chgrp named /var/named/rev.25.12.172
-
-[root@bastion ~]# chmod 640 /var/named/rev.25.12.172
-
-[root@bastion ~]# systemctl enable named
-Created symlink /etc/systemd/system/multi-user.target.wants/named.service → /usr/lib/systemd/system/named.service.
-
-[root@bastion ~]# systemctl start named
-
-[root@bastion ~]# systemctl status named
-● named.service - Berkeley Internet Name Domain (DNS)
-     Loaded: loaded (/usr/lib/systemd/system/named.service; enabled; vendor preset: disabled)
-     Active: active (running) since Fri 2025-05-09 16:42:12 CST; 4s ago
-    Process: 36786 ExecStartPre=/bin/bash -c if [ ! "$DISABLE_ZONE_CHECKING" == "yes" ]; then /usr/sbin/named-checkconf -z "$NAMED>
-    Process: 36789 ExecStart=/usr/sbin/named -u named -c ${NAMEDCONF} $OPTIONS (code=exited, status=0/SUCCESS)
-.......略........
+chgrp named /var/named/named.ocp.andy.com
+chmod 640 /var/named/named.ocp.andy.com
+chgrp named /var/named/rev.25.12.172
+chmod 640 /var/named/rev.25.12.172
+systemctl enable named
+systemctl start named
+systemctl status named
 ```
 
 ### 5、產生SSH
