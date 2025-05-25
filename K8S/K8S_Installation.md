@@ -77,8 +77,8 @@ systemctl enable containerd
 
 > 請依據所需K8S版本號碼輸入，並進行安裝kubelet、kubeadm、kubectl。
 ```
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 apt-get update
 apt-cache madison kubelet
 apt install -y kubelet kubeadm  kubectl
@@ -104,25 +104,21 @@ wget https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/k
 kubectl apply -f kube-flannel.yml
 ```
 
-
-*  重新顯示Join Master資訊
+> 若需重新顯示Join Master資訊
 ```
 kubeadm token create --print-join-command
 ```
 
-
-### 6.Worker Node加入K8S Cluster
-* 於Worker執行
-* 加入Cluster，使用Master產出的Join資訊
+> Worker Node加入K8S Cluster
+> 於Worker執行。加入Cluster，使用Master產出的Join資訊
 ```
 kubeadm join 192.168.0.231:6443 --token 0bxz18.pl91tl6wuovyi04i \
         --discovery-token-ca-cert-hash sha256:860dfa06a3f7614fa4fa404fa8647ae06ce001b52f2a469bc2c76d93cc59d174
 ```
 
-
-### 7.確認安裝成功
-* 於Master執行
-*  於Master檢查Node資訊，確認安裝成功
+### 確認安裝成功
+--
+* 於Master執行，於Master檢查Node資訊，確認安裝成功
 ```
 root@k8s1:~# kubectl get node
 NAME            STATUS   ROLES           AGE     VERSION
@@ -131,23 +127,21 @@ k8s2.andy.com   Ready    <none>          3m16s   v1.27.10
 k8s3.andy.com   Ready    <none>          3m13s   v1.27.10
 ```
 
-### 8.測試K8S是否可用
-* 於Master執行
+> 測試K8S是否可用
 ```
-root@k8s1:~# kubectl create deployment nginx --image=nginx
-deployment.apps/nginx created
+kubectl create deployment nginx --image=nginx
+kubectl expose deployment nginx --port=80 --type=NodePort
 
-root@k8s1:~# kubectl expose deployment nginx --port=80 --type=NodePort
-service/nginx exposed
-
-root@k8s1:~# kubectl get svc nginx
+kubectl get svc nginx
 NAME    TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
 nginx   NodePort   10.99.22.145   <none>        80:32400/TCP   2m11s
 ```
-*  開啟瀏覽器輸入 "K8S IP : Port"，若成功會顯示如下圖
+
+> 開啟瀏覽器輸入 "K8S IP : Port"，若成功會顯示如下圖 </p>
+
 ![](https://github.com/Andy0583/OCP/blob/main/Image/k8s/k8s-2.png?raw=true)
 
-*  刪除測試資料
+> 刪除測試資料
 ```
 root@k8s1:~# kubectl delete svc nginx
 service "nginx" deleted
