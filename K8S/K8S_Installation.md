@@ -116,6 +116,19 @@ kubeadm join 192.168.0.231:6443 --token 0bxz18.pl91tl6wuovyi04i \
         --discovery-token-ca-cert-hash sha256:860dfa06a3f7614fa4fa404fa8647ae06ce001b52f2a469bc2c76d93cc59d174
 ```
 
+### 簡化指令（非必要）
+--
+```
+cat >> /etc/profile << EOF
+alias kg="kubectl get"
+alias kc="kubectl create"
+alias kcf="kubectl create -f"
+alias kdf="kubectl delete -f"
+alias kds="kubectl describe”
+EOF
+source /etc/profile
+```
+
 ### 確認安裝成功
 --
 * 於Master執行，於Master檢查Node資訊，確認安裝成功
