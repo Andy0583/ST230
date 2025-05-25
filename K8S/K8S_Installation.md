@@ -131,9 +131,9 @@ source /etc/profile
 
 ### 確認安裝成功
 --
-* 於Master執行，於Master檢查Node資訊，確認安裝成功
+> 於Master執行，於Master檢查Node資訊，確認安裝成功
 ```
-root@k8s1:~# kubectl get node
+root@k8s1:~# kg node
 NAME            STATUS   ROLES           AGE     VERSION
 k8s1.andy.com   Ready    control-plane   14m     v1.27.10
 k8s2.andy.com   Ready    <none>          3m16s   v1.27.10
