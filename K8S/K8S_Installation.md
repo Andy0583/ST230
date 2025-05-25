@@ -8,6 +8,7 @@ sudo vi /etc/ssh/sshd_config
     PermitRootLogin yes
 sudo systemctl restart ssh
 ```
+> 可使用Putty登入root帳號
 ```
 apt update -y && apt upgrade -y
 ```
