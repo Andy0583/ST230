@@ -124,7 +124,7 @@ alias kg="kubectl get"
 alias kc="kubectl create"
 alias kcf="kubectl create -f"
 alias kdf="kubectl delete -f"
-alias kds="kubectl describe”
+alias kds="kubectl describe"
 EOF
 source /etc/profile
 ```
