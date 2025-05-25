@@ -8,13 +8,12 @@ sudo vi /etc/ssh/sshd_config
     PermitRootLogin yes
 sudo systemctl restart ssh
 ```
+
 > 可使用Putty登入root帳號
 ```
 apt update -y && apt upgrade -y
 ```
 
-### 修改Hostname及Hosts
----
 > 依據環境不同修改Host Name及”hosts”
 ```
 hostnamectl set-hostname "k8s1.andy.com"
@@ -25,13 +24,11 @@ cat >> /etc/hosts << EOF
 EOF
 ```
 
-### 永久關閉Swap
----
+> 永久關閉Swap
 ```
 swapoff -a
 sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 ```
-
 
 ### 安裝K8S
 ---
