@@ -150,7 +150,7 @@ nginx   NodePort   10.99.22.145   <none>        80:32400/TCP   2m11s
 * 開啟瀏覽器輸入 "K8S IP : Port"，若成功會顯示如下圖 </p>
 ![](https://github.com/Andy0583/OCP/blob/main/Image/k8s/k8s-2.png?raw=true)
 
-> 刪除測試資料
+* 刪除測試資料
 ```
 kubectl delete svc nginx
 kubectl delete deploy nginx
