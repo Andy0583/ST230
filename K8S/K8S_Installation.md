@@ -114,7 +114,7 @@ kubeadm join 192.168.0.231:6443 --token 0bxz18.pl91tl6wuovyi04i \
 ```
 
 ### 簡化指令（非必要）
---
+---
 ```
 cat >> /etc/profile << EOF
 alias kg="kubectl get"
@@ -127,7 +127,7 @@ source /etc/profile
 ```
 
 ### 確認安裝成功
---
+---
 * 於Master執行，於Master檢查Node資訊，確認安裝成功
 ```
 root@k8s1:~# kg node
